@@ -157,19 +157,19 @@ var title = ref('');
 var subtitle = ref('');
 var imgurl = ref('');
 var description = ref('');
-var totalObject = '';
+var totalObject = 0;
 var products = []
 
 axios.get("https://asudemcanta-default-rtdb.firebaseio.com/products.json").then(function(e){
      var data = e.data['-NoWMdA5BdknrLOSdSIq']; 
      var objeSayisi = Object.keys(data).length;
-     totalObject = String(objeSayisi);
+     totalObject = Number(objeSayisi);
      products = e.data['-NoWMdA5BdknrLOSdSIq']
 })
   
 const yukle = () => {
   setTimeout(() => {
-  axios.put("https://asudemcanta-default-rtdb.firebaseio.com/products/-NoWMdA5BdknrLOSdSIq/" + totalObject +'.json', {
+  axios.put("https://asudemcanta-default-rtdb.firebaseio.com/products/-NoWMdA5BdknrLOSdSIq/" + String(totalObject) +'.json', {
     title: title.value,
   subtitle: subtitle.value,
   description: description.value,
@@ -180,6 +180,12 @@ const yukle = () => {
        .then(function(response) {
          console.log("Ürün başarıyla eklendi:", response.data);
          alert('Ürün yüklendi.')
+         category.value = '';
+         title.value = '';
+         subtitle.value = '';
+         imgurl.value = '';
+         description.value = '';
+         totalObject = totalObject+1;
        })
        .catch(function(error) {
          console.error("Ürün eklenirken bir hata oluştu:", error);
