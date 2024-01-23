@@ -2,7 +2,7 @@
   <div id="container">
     <div id="LoginForm">
       <div class="RightPart">
-        <p>Yönetici Paneli {{ useCookieStore().$state }}</p>
+        <p>Yönetici Paneli</p>
       </div>
       <div class="LeftPart">
         <label for="text">Yönetici Adı</label>

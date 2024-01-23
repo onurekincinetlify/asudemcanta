@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 
 export const useCookieStore = defineStore('cookie', {
     state: () => ({
-        userCookie: 'aaa',
+        userCookie: '',
         username: '',
         password: '',
     }),
