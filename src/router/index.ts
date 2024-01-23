@@ -1,25 +1,48 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import panelSystem from '@/components/panelSystem.vue';
+import panel from '@/components/panel.vue';
+import { useCookieStore } from "../stores/cookieStore";
+import axios from 'axios';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    component: panelSystem
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/panel',
+    name: 'login',
+    component : panel
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to,from,next)=>{
+  if(to.name == 'login'){
+    axios.post("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyADFmNu_NAM1I3lLVH5vSlFRCfHkcKu8NM", {
+            email: useCookieStore().$state.username,
+            password: useCookieStore().$state.password,
+            returnSecureToken: true
+        }).then((e:any) => {
+          if(localStorage.getItem('registered') && useCookieStore().$state.userCookie === e.data.localId){
+            console.log(useCookieStore().$state.userCookie)
+            console.log(e.data.localId)
+            next(true);
+          } else {
+            router.push('/')
+            next(true);
+          }
+        }).catch((e)=>{
+          router.push('/')
+          next(true);
+        })
+  } else {
+    next(true);
+  }
 })
 
 export default router
